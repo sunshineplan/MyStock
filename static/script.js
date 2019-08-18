@@ -35,7 +35,7 @@ function update_color() {
     if (change > 0) {
         $('.change').css('color', 'red');
         $('.percent').css('color', 'red');
-    } if (change < 0) {
+    } else if (change < 0) {
         $('.change').css('color', 'green');
         $('.percent').css('color', 'green');
     } else {

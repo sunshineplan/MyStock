@@ -20,7 +20,7 @@ class SSE:
         if self.exist:
             realtime = {'index': 'SSE',
                         'code': self.snap['code'],
-                        'name': self.snap['snap'][0],
+                        'name': self.snap['snap'][0].strip(),
                         'now': self.snap['snap'][5],
                         'change': self.snap['snap'][6],
                         'percent': str(self.snap['snap'][7])+'%',
