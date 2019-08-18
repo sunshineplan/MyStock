@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ index }}:{{ code }}
+{% endblock %}
+
+{% block header %}
+<h2>
+  <span class='name'></span>(<span class='code'></span>)&nbsp;&nbsp;&nbsp;<span class='now'></span>&nbsp;&nbsp;&nbsp;<span class='percent'></span>
+</h2>
+<div class='form-inline'>
+  昨收:&nbsp;<span class='last'></span>
+  涨跌:&nbsp;<span class='change'></span>
+  涨幅:&nbsp;<span class='percent'></span>
+  &nbsp;&nbsp;&nbsp;卖盘:&nbsp;<span class='sell5' style='color:red;display: flex;'></span>
+</div>
+<div class='form-inline'>
+  最高:&nbsp;<span class='high'></span>
+  最低:&nbsp;<span class='low'></span>
+  开盘:&nbsp;<span class='open'></span>
+  &nbsp;&nbsp;&nbsp;买盘:&nbsp;<span class='buy5' style='color:green;display: flex;'></span>
+</div>
+<small>更新时间: <span class='update'></span></small>
+{% endblock %}
+
+{% block content %}
+<canvas id='chart' width='1000'></canvas>
+<script>
+  Chart.defaults.global.responsive = false;
+  Chart.defaults.global.legend.display = false;
+  Chart.defaults.global.hover.mode = 'index';
+  Chart.defaults.global.hover.intersect = false;
+  Chart.defaults.global.tooltips.mode = 'index';
+  Chart.defaults.global.tooltips.intersect = false;
+  Chart.defaults.global.tooltips.displayColors = false;
+  var cfg = {
+    type: 'line',
+    data: {
+      labels: ['09:30', '10:00', '10:30', '11:00', '11:30', '13:30', '14:00', '14:30', '15:00'],
+      datasets: [
+        {
+          label: 'Price',
+          fill: false,
+          lineTension: 0,
+          borderWidth: 2,
+          borderColor: 'red',
+          backgroundColor: 'red',
+          pointRadius: 0,
+          pointHoverRadius: 3
+        }
+      ]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          type: 'time',
+          distribution: 'series',
+          time: {
+            unit: 'minute',
+            displayFormats: {
+              minute: 'HH:mm'
+            },
+            parser: 'HH:mm'
+          },
+          ticks: {
+            source: 'labels'
+          }
+        }]
+      }
+    }
+  };
+  var chart = new Chart($('#chart'), cfg);
+  $(function () {
+    update_realtime('{{ index }}', '{{ code }}');
+    update_chart('{{ index }}', '{{ code }}');
+    setInterval(function () {
+      update_chart('{{ index }}', '{{ code }}');
+    }, 60000);
+    setInterval(function () {
+      update_realtime('{{ index }}', '{{ code }}');
+    }, 5000);
+  });
+</script>
+{% endblock %}
