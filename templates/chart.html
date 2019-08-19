@@ -64,14 +64,14 @@
   });
   $(function () {
     if ('{{ code }}' != 'n/a') {
-      update_realtime('{{ index }}', '{{ code }}');
       update_chart('{{ index }}', '{{ code }}');
+      update_realtime('{{ index }}', '{{ code }}');
       setInterval(function () {
         update_chart('{{ index }}', '{{ code }}');
       }, 60000);
       setInterval(function () {
         update_realtime('{{ index }}', '{{ code }}');
-      }, 6000);
+      }, 5000);
     }
   });
 </script>
