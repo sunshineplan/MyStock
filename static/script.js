@@ -1,6 +1,6 @@
 function update_realtime(index, code) {
     $.getJSON('/get', { index: index, code: code, q: 'realtime' }, function (json) {
-        document.title = json['name'] + ' ' + json['now'] + ' ' + json['percent'] + '%';
+        document.title = json['name'] + ' ' + json['now'] + ' ' + json['percent'];
         $.each(json, function (key, val) {
             if (key == 'sell5' || key == 'buy5') {
                 var list = '';
