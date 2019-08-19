@@ -6,7 +6,8 @@
 
 {% block header %}
 <h2>
-  <span class='name'></span>(<span class='code'></span>)&nbsp;&nbsp;&nbsp;<span class='now'></span>&nbsp;&nbsp;&nbsp;<span class='percent'></span>
+  <span class='name'></span>(<span class='code'></span>)&nbsp;&nbsp;&nbsp;
+  <span class='now'></span>&nbsp;&nbsp;&nbsp;<span class='percent'></span>
 </h2>
 <div class='form-inline'>
   昨收:&nbsp;<span class='last'></span>
@@ -49,6 +50,16 @@
           pointHoverRadius: 3
         }
       ]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            autoSkipPadding: 85,
+            maxRotation: 0
+          }
+        }]
+      }
     }
   });
   $(function () {
