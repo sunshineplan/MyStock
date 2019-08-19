@@ -1,3 +1,5 @@
+from re import fullmatch
+
 from flask import Flask, abort, jsonify, render_template, request
 
 from stock import SSE, SZSE
@@ -17,8 +19,9 @@ def get_stock(index, code):
 def chart(index, code):
     stock = get_stock(index, code)
     if stock:
-        if stock.exist:
+        if fullmatch('(00[0-3]|159|300|51[0-3]|60[0-3]|688)\d{3}|51\d{4}', code):
             return render_template('chart.html', index=index, code=code)
+        return render_template('chart.html', index=index, code='n/a')
     abort(404)
 
 

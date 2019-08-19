@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ index }}:{{ code }}
+{{ index }}: n/a
 {% endblock %}
 
 {% block header %}
 <h2>
-  <span class='name'></span>(<span class='code'></span>)&nbsp;&nbsp;&nbsp;
+  <span class='name'>n/a</span>(<span class='code'>n/a</span>)&nbsp;&nbsp;&nbsp;
   <span class='now'></span>&nbsp;&nbsp;&nbsp;<span class='percent'></span>
 </h2>
 <div class='form-inline'>
-  昨收:&nbsp;<span class='last'></span>
-  涨跌:&nbsp;<span class='change'></span>
-  涨幅:&nbsp;<span class='percent'></span>
+  昨收:&nbsp;<span class='last'>n/a</span>
+  涨跌:&nbsp;<span class='change'>n/a</span>
+  涨幅:&nbsp;<span class='percent'>n/a</span>
   &nbsp;&nbsp;&nbsp;卖盘:&nbsp;<span class='sell5' style='color:red;display: flex;'></span>
 </div>
 <div class='form-inline'>
-  最高:&nbsp;<span class='high'></span>
-  最低:&nbsp;<span class='low'></span>
-  开盘:&nbsp;<span class='open'></span>
+  最高:&nbsp;<span class='high'>n/a</span>
+  最低:&nbsp;<span class='low'>n/a</span>
+  开盘:&nbsp;<span class='open'>n/a</span>
   &nbsp;&nbsp;&nbsp;买盘:&nbsp;<span class='buy5' style='color:green;display: flex;'></span>
 </div>
-<small>更新时间: <span class='update'></span></small>
+<small>更新时间: <span class='update'>n/a</span></small>
 {% endblock %}
 
 {% block content %}
@@ -63,14 +63,16 @@
     }
   });
   $(function () {
-    update_realtime('{{ index }}', '{{ code }}');
-    update_chart('{{ index }}', '{{ code }}');
-    setInterval(function () {
-      update_chart('{{ index }}', '{{ code }}');
-    }, 60000);
-    setInterval(function () {
+    if ('{{ code }}' != 'n/a') {
       update_realtime('{{ index }}', '{{ code }}');
-    }, 6000);
+      update_chart('{{ index }}', '{{ code }}');
+      setInterval(function () {
+        update_chart('{{ index }}', '{{ code }}');
+      }, 60000);
+      setInterval(function () {
+        update_realtime('{{ index }}', '{{ code }}');
+      }, 6000);
+    }
   });
 </script>
 {% endblock %}
