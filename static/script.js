@@ -15,9 +15,11 @@ function update_realtime(index, code) {
                 $('.' + key).html(list);
             } else {
                 $('.' + key).text(val);
-            }
+            };
         });
-    }).then(() => update_color());
+    }).done(function () {
+        update_color()
+    });
 };
 function update_chart(index, code) {
     $.get('/get', { index: index, code: code, q: 'chart' }, function (json) {
