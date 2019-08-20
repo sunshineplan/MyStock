@@ -1,14 +1,14 @@
 function update_realtime(index, code) {
     $.getJSON('/get', { index: index, code: code, q: 'realtime' }, function (json) {
         document.title = json['name'] + ' ' + json['now'] + ' ' + json['percent'];
-        last = chart.data.datasets[0].data;
+        var last = chart.data.datasets[0].data;
         if (last.length != 0) {
             last[last.length - 1]['y'] = json['now'];
             chart.update();
         };
         $.each(json, function (key, val) {
             if (key == 'sell5' || key == 'buy5') {
-                list = '';
+                var list = '';
                 $.each(val, function (idx, data) {
                     list = list + '<div class="buysell">' + data[0] + '-' + data[1] + '</div>'
                 });
@@ -36,7 +36,7 @@ function update_color() {
     change_color('high')
     change_color('low')
     change_color('open')
-    change = parseFloat($('.change').text());
+    var change = parseFloat($('.change').text());
     if (change > 0) {
         $('.change').css('color', 'red');
         $('.percent').css('color', 'red');
@@ -49,8 +49,8 @@ function update_color() {
     }
 };
 function change_color(name) {
-    last = parseFloat($('.last').text());
-    num = parseFloat($('.' + name).text());
+    var last = parseFloat($('.last').text());
+    var num = parseFloat($('.' + name).text());
     if (num > last) {
         $('.' + name).css('color', 'red');
     } else if (num < last) {
