@@ -1,9 +1,11 @@
 function update_realtime(index, code) {
     $.getJSON('/get', { index: index, code: code, q: 'realtime' }, function (json) {
         document.title = json['name'] + ' ' + json['now'] + ' ' + json['percent'];
-        last = chart.data.datasets[0].data
-        last[last.length - 1]['y'] = json['now']
-        chart.update();
+        last = chart.data.datasets[0].data;
+        if (last.length != 0) {
+            last[last.length - 1]['y'] = json['now'];
+            chart.update();
+        };
         $.each(json, function (key, val) {
             if (key == 'sell5' || key == 'buy5') {
                 list = '';
