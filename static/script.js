@@ -10,7 +10,7 @@ function update_realtime(index, code) {
             if (key == 'sell5' || key == 'buy5') {
                 var list = '';
                 $.each(val, function (idx, data) {
-                    list = list + '<div class="buysell">' + data[0] + '-' + data[1] + '</div>'
+                    list = list + '<div class="buysell">' + data[0] + '-' + data[1] + '</div>';
                 });
                 $('.' + key).html(list);
             } else {
@@ -18,7 +18,7 @@ function update_realtime(index, code) {
             };
         });
     }).done(function () {
-        update_color()
+        update_color();
     });
 };
 function update_chart(index, code) {
