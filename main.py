@@ -1,37 +1,51 @@
-from re import fullmatch
+import os
 
-from flask import Flask, abort, jsonify, render_template, request
+import click
+from flask import Flask
 
-from stock import SSE, SZSE
+import auth
+import db
+import stock
 
 app = Flask(__name__)
+app.config['DATABASE'] = os.path.join(app.instance_path, 'mystocks.db')
+app.config['SECRET_KEY'] = os.urandom(16)
+
+db.init_app(app)
+
+app.register_blueprint(auth.bp)
+app.register_blueprint(stock.bp)
+app.add_url_rule('/', endpoint='index')
+
+try:
+    os.makedirs(app.instance_path)
+except OSError:
+    pass
 
 
-def get_stock(index, code):
-    indices = ['SSE', 'SZSE']
-    if index in indices:
-        return eval(index+'("'+code+'")')
+@click.group(invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
+    if ctx.invoked_subcommand is None:
+        ctx.invoke(run)
+
+
+@cli.command(hidden=True)
+@click.confirmation_option()
+def init_db():
+    db.init_db(app)
+    click.echo('Initialized the database.')
+
+
+@cli.command(short_help='Run Server')
+@click.option('--port', '-p', default=80, help='Listening Port')
+@click.option('--debug', is_flag=True, hidden=True)
+def run(port, debug):
+    if debug:
+        app.run(host='0.0.0.0', port=port, debug=debug)
     else:
-        return None
-
-
-@app.route('/<string:index>/<string:code>')
-def chart(index, code):
-    stock = get_stock(index, code)
-    if stock:
-        if fullmatch('(00[0-3]|159|300|51[0-3]|60[0-3]|688)\d{3}|51\d{4}', code):
-            return render_template('chart.html', index=index, code=code)
-        return render_template('chart.html', index=index, code='n/a')
-    abort(404)
-
-
-@app.route('/get')
-def get():
-    index = request.args.get('index')
-    code = request.args.get('code')
-    q = request.args.get('q')
-    return jsonify(eval('get_stock(index, code).'+q))
+        app.run(host='0.0.0.0', port=port, debug=True)
 
 
 if __name__ == '__main__':
-    app.run(port=80, debug=True)
+    cli()

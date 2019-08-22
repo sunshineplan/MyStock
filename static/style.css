@@ -3,6 +3,43 @@ body {
                  'Microsoft YaHei New', 'Microsoft Yahei', 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
 }
 
+.topbar {
+    min-height: 70px;
+    background-color: #1a73e8;
+}
+
+.brand {
+    padding-left: 20px;
+    font-size: 25px;
+    letter-spacing: .3px;
+    color: white;
+}
+
+.brand:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.topbar .nav-link {
+    padding-left: 8px;
+    padding-right: 8px;
+    color: white !important;
+}
+
+.topbar .link:hover {
+    background: rgba(255,255,255,.2);
+    border-radius: 5px;
+}
+
+.login {
+    width: 250px;
+    margin: 0 auto;
+}
+
+.table-responsive {
+    padding: 0px 30px;
+}
+
 header {
     padding: 20px;
 }
