@@ -108,9 +108,12 @@ class SSE:
 
 class SZSE:
     def __init__(self, code):
-        self.json = requests.get(
-            'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}).json()
-        self.exist = True if self.json['code'] == '0' else False
+        try:
+            self.json = requests.get(
+                'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}).json()
+            self.exist = True if self.json['code'] == '0' else False
+        except:
+            self.exist = False
 
     @property
     def realtime(self):

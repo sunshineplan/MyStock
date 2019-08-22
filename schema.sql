@@ -27,6 +27,7 @@ VALUES
 INSERT INTO stock
   (user_id, idx, code)
 VALUES
+  (0, 'SSE', '000001'),
   (0, 'SZSE', '399001'),
   (0, 'SZSE', '399106'),
   (0, 'SZSE', '399005'),
