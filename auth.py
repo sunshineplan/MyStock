@@ -56,7 +56,7 @@ def login():
                 flash('Detected first time running. Initialized the database.')
             else:
                 flash('Critical Error! Please contact your system administrator.')
-            return render_template('login.html')
+            return render_template('auth/login.html')
 
         if user is None:
             error = 'Incorrect username.'
