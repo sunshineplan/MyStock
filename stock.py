@@ -61,10 +61,17 @@ def get_mystocks():
     return jsonify(result)
 
 
+@bp.route('/indices')
+def get_indices():
+    indices = {'沪': SSE('000001').realtime, '深': SZSE('399001').realtime,
+               '创': SZSE('399006').realtime, '中小板': SZSE('399005').realtime}
+    return jsonify(indices)
+
+
 class SSE:
     def __init__(self, code):
         try:
-            if requests.get('http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code).status_code == 200:
+            if requests.get('http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).status_code == 200:
                 self.exist = True
             else:
                 self.exist = False
@@ -72,9 +79,9 @@ class SSE:
             self.exist = False
         if self.exist:
             self.snap = requests.get(
-                'http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code).json()
+                'http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).json()
             self.line = requests.get(
-                'http://yunhq.sse.com.cn:32041/v1/sh1/line/%s' % code).json()
+                'http://yunhq.sse.com.cn:32041/v1/sh1/line/%s' % code, timeout=1).json()
 
     @property
     def realtime(self):
@@ -116,7 +123,7 @@ class SZSE:
     def __init__(self, code):
         try:
             self.json = requests.get(
-                'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}).json()
+                'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}, timeout=1).json()
             self.exist = True if self.json['code'] == '0' else False
         except:
             self.exist = False

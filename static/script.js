@@ -1,6 +1,30 @@
+function update_indices() {
+    $.getJSON('/indices', function (data) {
+        $.each(data, function (index, json) {
+            if (json !== null) {
+                var change = parseFloat(json.change)
+                if (change > 0) {
+                    $('#' + index + ' .now').text(json.now).css('color', 'red');
+                    $('#' + index + ' .change').text(json.change).css('color', 'red');
+                    $('#' + index + ' .percent').text(json.percent).css('color', 'red');
+                } else if (change < 0) {
+                    $('#' + index + ' .now').text(json.now).css('color', 'green');
+                    $('#' + index + ' .change').text(json.change).css('color', 'green');
+                    $('#' + index + ' .percent').text(json.percent).css('color', 'green');
+                } else {
+                    $('#' + index + ' .now').text(json.now);
+                    $('#' + index + ' .change').text(json.change);
+                    $('#' + index + ' .percent').text(json.percent);
+                }
+            };
+        });
+    }).done(function () {
+        update_color();
+    });
+};
 function my_stocks() {
     $.getJSON('/mystocks', function (json) {
-        $('tbody').empty();
+        $('#mystocks').empty();
         $.each(json, function (i, item) {
             if (item !== null) {
                 var last = parseFloat(item.last);
@@ -25,7 +49,7 @@ function my_stocks() {
                 add_color_tr(last, item.low, $tr);
                 add_color_tr(last, item.open, $tr);
                 $tr.append($('<td>').text(item.last));
-                $tr.appendTo('tbody');
+                $tr.appendTo('#mystocks');
             };
         });
     });
@@ -54,9 +78,9 @@ function update_realtime(index, code) {
                     $.each(val, function (idx, data) {
                         list = list + '<div class="buysell">' + data[0] + '-' + data[1] + '</div>';
                     });
-                    $('.' + key).html(list);
+                    $('header .' + key).html(list);
                 } else {
-                    $('.' + key).text(val);
+                    $('header .' + key).text(val);
                 };
             });
         };
@@ -83,26 +107,26 @@ function update_color() {
     change_color('high');
     change_color('low');
     change_color('open');
-    var change = parseFloat($('.change').text());
+    var change = parseFloat($('header .change').text());
     if (change > 0) {
-        $('.change').css('color', 'red');
-        $('.percent').css('color', 'red');
+        $('header .change').css('color', 'red');
+        $('header .percent').css('color', 'red');
     } else if (change < 0) {
-        $('.change').css('color', 'green');
-        $('.percent').css('color', 'green');
+        $('header .change').css('color', 'green');
+        $('header .percent').css('color', 'green');
     } else {
-        $('.change').css('color', '');
-        $('.percent').css('color', '');
+        $('header .change').css('color', '');
+        $('header .percent').css('color', '');
     };
 };
 function change_color(name) {
-    var last = parseFloat($('.last').text());
-    var num = parseFloat($('.' + name).text());
+    var last = parseFloat($('header .last').text());
+    var num = parseFloat($('header .' + name).text());
     if (num > last) {
-        $('.' + name).css('color', 'red');
+        $('header .' + name).css('color', 'red');
     } else if (num < last) {
-        $('.' + name).css('color', 'green');
+        $('header .' + name).css('color', 'green');
     } else {
-        $('.' + name).css('color', '');
+        $('header .' + name).css('color', '');
     };
 };
