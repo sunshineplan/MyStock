@@ -78,10 +78,13 @@ class SSE:
         except:
             self.exist = False
         if self.exist:
-            self.snap = requests.get(
-                'http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).json()
-            self.line = requests.get(
-                'http://yunhq.sse.com.cn:32041/v1/sh1/line/%s' % code, timeout=1).json()
+            try:
+                self.snap = requests.get(
+                    'http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).json()
+                self.line = requests.get(
+                    'http://yunhq.sse.com.cn:32041/v1/sh1/line/%s' % code, timeout=1).json()
+            except:
+                self.exist = False
 
     @property
     def realtime(self):
