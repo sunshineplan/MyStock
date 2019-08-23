@@ -17,6 +17,9 @@ function my_stocks() {
                 } else if (parseFloat(item.change) < 0) {
                     $tr.append($('<td>').text(item.change).css('color', 'green'));
                     $tr.append($('<td>').text(item.percent).css('color', 'green'));
+                } else {
+                    $tr.append($('<td>').text(item.change));
+                    $tr.append($('<td>').text(item.percent));
                 };
                 add_color_tr(last, item.high, $tr);
                 add_color_tr(last, item.low, $tr);
