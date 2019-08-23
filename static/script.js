@@ -2,6 +2,7 @@ function update_indices() {
     $.getJSON('/indices', function (data) {
         $.each(data, function (index, json) {
             if (json !== null) {
+                $('#' + index).prop('href', '/' + json.index + '/' + json.code)
                 var change = parseFloat(json.change)
                 if (change > 0) {
                     $('#' + index + ' .now').text(json.now).css('color', 'red');

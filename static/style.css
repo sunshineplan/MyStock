@@ -73,6 +73,11 @@ span {
 }
 
 #沪, #深, #创, #中小板 {
+    color: black;
     max-width: 25%;
     flex: 0 0 25%;
+}
+
+#沪, #深, #创, #中小板:hover {
+    text-decoration: none;
 }
