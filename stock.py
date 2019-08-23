@@ -4,7 +4,7 @@ from re import fullmatch
 import requests
 from flask import Blueprint, abort, g, jsonify, render_template, request
 
-from db import get_db
+from db import get_db, init_db
 
 bp = Blueprint('stock', __name__,)
 
@@ -43,12 +43,18 @@ def get():
 @bp.route('/mystocks')
 def get_mystocks():
     db = get_db()
-    if g.user:
-        my_stocks = db.execute(
-            'SELECT idx, code FROM stock WHERE user_id = ?', (g.user['id'],)).fetchall()
-    else:
-        my_stocks = db.execute(
-            'SELECT idx, code FROM stock WHERE user_id = 0').fetchall()
+    try:
+        if g.user:
+            my_stocks = db.execute(
+                'SELECT idx, code FROM stock WHERE user_id = ?', (g.user['id'],)).fetchall()
+        else:
+            my_stocks = db.execute(
+                'SELECT idx, code FROM stock WHERE user_id = 0').fetchall()
+    except:
+        tables = db.execute('SELECT name FROM sqlite_master').fetchall()
+        if tables == []:
+            init_db()
+            return get_mystocks()
     result = []
     for i in my_stocks:
         result.append(get_stock(i['idx'], i['code']).realtime)
