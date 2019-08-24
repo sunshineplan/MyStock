@@ -2,7 +2,7 @@ from datetime import date, datetime, time, timedelta
 from re import fullmatch
 
 import requests
-from flask import Blueprint, abort, g, jsonify, render_template, request
+from flask import Blueprint, g, jsonify, render_template, request
 
 from db import get_db, init_db
 
@@ -24,12 +24,9 @@ def get_stock(index, code):
 
 @bp.route('/<string:index>/<string:code>')
 def chart(index, code):
-    stock = get_stock(index, code)
-    if stock:
-        if fullmatch('(00[0-3]|159|300|399|51[0-3]|60[0-3]|688)\d{3}|51\d{4}', code):
-            return render_template('chart.html', index=index, code=code)
-        return render_template('chart.html', index=index, code='n/a')
-    abort(404)
+    if fullmatch('(00[0-3]|159|300|399|51[0-3]|60[0-3]|688)\d{3}|51\d{4}', code):
+        return render_template('chart.html', index=index, code=code)
+    return render_template('chart.html', index=index, code='n/a')
 
 
 @bp.route('/get')
@@ -70,6 +67,7 @@ def get_indices():
 
 class SSE:
     def __init__(self, code):
+        self.code = code
         try:
             if requests.get('http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).status_code == 200:
                 self.exist = True
@@ -103,7 +101,7 @@ class SSE:
                         'last': self.snap['snap'][1],
                         'update': str(self.snap['date'])+'.'+str(self.snap['time'])}
             return realtime
-        return None
+        return {'index': 'SSE', 'code': self.code, 'name': 'n/a'}
 
     @property
     def chart(self):
@@ -124,6 +122,7 @@ class SSE:
 
 class SZSE:
     def __init__(self, code):
+        self.code = code
         try:
             self.json = requests.get(
                 'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}, timeout=1).json()
@@ -135,8 +134,10 @@ class SZSE:
     def realtime(self):
         if self.exist:
             try:
-                sell5 = [list(i.values()) for i in self.json['data']['sellbuy5'][:5]]
-                buy5 = [list(i.values()) for i in self.json['data']['sellbuy5'][5:]]
+                sell5 = [list(i.values())
+                         for i in self.json['data']['sellbuy5'][:5]]
+                buy5 = [list(i.values())
+                        for i in self.json['data']['sellbuy5'][5:]]
             except KeyError:
                 sell5 = None
                 buy5 = None
@@ -154,7 +155,7 @@ class SZSE:
                         'last': self.json['data']['close'],
                         'update': self.json['data']['marketTime']}
             return realtime
-        return None
+        return {'index': 'SZSE', 'code': self.code}
 
     @property
     def chart(self):
