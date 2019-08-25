@@ -65,6 +65,33 @@ def get_indices():
     return jsonify(indices)
 
 
+@bp.route('/star', methods=('GET', 'POST'))
+def star():
+    refer = request.referrer
+    index = refer.split('/')[-2]
+    code = refer.split('/')[-1]
+    db = get_db()
+    if request.method == 'GET':
+        if g.user:
+            stock = db.execute(
+                'SELECT * FROM stock WHERE idx = ? AND code = ? AND user_id = ?', (index, code, g.user['id'])).fetchone()
+            if stock:
+                return 'True'
+        return 'False'
+    action = request.form.get('action')
+    if g.user:
+        if action == 'unstar':
+            db.execute('DELETE FROM stock WHERE idx = ? AND code = ? AND user_id = ?',
+                       (index, code, g.user['id']))
+            db.commit()
+        else:
+            db.execute('INSERT INTO stock (idx, code, user_id) VALUES (?, ?, ?)',
+                       (index, code, g.user['id']))
+            db.commit()
+        return '1'
+    return '0'
+
+
 class SSE:
     def __init__(self, code):
         self.code = code

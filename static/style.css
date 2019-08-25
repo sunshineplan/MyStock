@@ -112,3 +112,34 @@ span {
 #沪, #深, #创, #中小板:hover {
     text-decoration: none;
 }
+
+.star {
+    width: 100px;
+    vertical-align: middle;
+    border-radius: 25px;
+    border: 1px solid #1da1f2;
+    padding: 10px 20px;
+    margin-left: 150px;
+    color: #1da1f2;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: white;
+}
+
+.star:hover {
+    background-color: rgba(29, 161, 242, 0.1);
+}
+
+.star:focus {
+    outline: none;
+}
+
+.star.stared {
+    background-color: #1da1f2;
+    color: white;
+}
+
+.star.unstar {
+    background-color: #ca2055;
+    border: 1px solid #ca2055;
+}
