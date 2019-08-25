@@ -29,8 +29,29 @@ My Stocks
 </div>
 <script>
   $(function () {
+    $('#mystocks').sortable({
+      start: function () {
+        mystocks.abort();
+        clearInterval(reload);
+      },
+      stop: function () {
+        my_stocks();
+        reload = setInterval(function () {
+          my_stocks();
+        }, 5000);
+      },
+      update: function (event, ui) {
+        var orig = [ui.item.find('td')[0].textContent, ui.item.find('td')[1].textContent];
+        if (ui.item.prev().length != 0) {
+          var dest = [ui.item.prev().find('td')[0].textContent, ui.item.prev().find('td')[1].textContent];
+        } else {
+          dest = 'top';
+        };
+        $.post('/reorder', { orig: JSON.stringify(orig), dest: JSON.stringify(dest) });
+      }
+    });
     my_stocks();
-    setInterval(function () {
+    reload = setInterval(function () {
       my_stocks();
     }, 5000);
   })

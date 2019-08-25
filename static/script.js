@@ -24,7 +24,7 @@ function update_indices() {
   });
 };
 function my_stocks() {
-  $.getJSON('/mystocks', function (json) {
+  mystocks = $.getJSON('/mystocks', function (json) {
     $('#mystocks').empty();
     $.each(json, function (i, item) {
       if (item !== null && item.name != 'n/a') {

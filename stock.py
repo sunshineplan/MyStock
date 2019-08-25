@@ -1,4 +1,5 @@
 from datetime import date, datetime, time, timedelta
+from json import loads
 from re import fullmatch
 
 import requests
@@ -43,7 +44,7 @@ def get_mystocks():
     try:
         if g.user:
             my_stocks = db.execute(
-                'SELECT idx, code FROM stock WHERE user_id = ?', (g.user['id'],)).fetchall()
+                'SELECT idx, code FROM stock WHERE user_id = ? ORDER BY seq', (g.user['id'],)).fetchall()
         else:
             my_stocks = db.execute(
                 'SELECT idx, code FROM stock WHERE user_id = 0').fetchall()
@@ -88,6 +89,33 @@ def star():
             db.execute('INSERT INTO stock (idx, code, user_id) VALUES (?, ?, ?)',
                        (index, code, g.user['id']))
             db.commit()
+        return '1'
+    return '0'
+
+
+@bp.route('/reorder', methods=('POST',))
+def reorder():
+    orig = loads(request.form.get('orig'))
+    dest = loads(request.form.get('dest'))
+    db = get_db()
+    if g.user:
+        orig_seq = db.execute(
+            'SELECT seq FROM stock WHERE idx = ? AND code = ? AND user_id = ?', (orig[0], orig[1], g.user['id'])).fetchone()['seq']
+        if dest != 'top':
+            dest_seq = db.execute(
+                'SELECT seq FROM stock WHERE idx = ? AND code = ? AND user_id = ?', (dest[0], dest[1], g.user['id'])).fetchone()['seq']
+        else:
+            dest_seq = 0
+        if orig_seq > dest_seq:
+            dest_seq += 1
+            db.execute('UPDATE stock SET seq = seq + 1 WHERE seq >= ? AND user_id = ? AND seq < ?',
+                       (dest_seq, g.user['id'], orig_seq))
+        else:
+            db.execute('UPDATE stock SET seq = seq - 1 WHERE seq <= ? AND user_id = ? AND seq > ?',
+                       (dest_seq, g.user['id'], orig_seq))
+        db.execute('UPDATE stock SET seq = ? WHERE idx = ? AND code = ? AND user_id = ?',
+                   (dest_seq, orig[0], orig[1], g.user['id']))
+        db.commit()
         return '1'
     return '0'
 
