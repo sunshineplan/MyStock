@@ -12,8 +12,7 @@ CREATE TABLE user (
   password TEXT NOT NULL
 );
 
-CREATE TABLE stock
-(
+CREATE TABLE stock (
   user_id INTEGER NOT NULL,
   idx TEXT NOT NULL,
   code TEXT NOT NULL,
