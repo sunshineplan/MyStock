@@ -159,7 +159,7 @@ class SSE:
         self.code = code
         self.pattern = '000[0-1]\d{2}|(51[0-358]|60[0-3]|688)\d{3}'
         try:
-            if requests.get('http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).status_code == 200:
+            if requests.get(f'http://yunhq.sse.com.cn:32041/v1/sh1/snap/{code}', timeout=1).status_code == 200:
                 self.exist = True
             else:
                 self.exist = False
@@ -168,9 +168,9 @@ class SSE:
         if self.exist:
             try:
                 self.snap = requests.get(
-                    'http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).json()
+                    f'http://yunhq.sse.com.cn:32041/v1/sh1/snap/{code}', timeout=1).json()
                 self.line = requests.get(
-                    'http://yunhq.sse.com.cn:32041/v1/sh1/line/%s' % code, timeout=1).json()
+                    f'http://yunhq.sse.com.cn:32041/v1/sh1/line/{code}', timeout=1).json()
             except:
                 self.exist = False
 
