@@ -75,7 +75,8 @@ My Stocks
       var stock = ui.item.value.split(' ')[0].split(':');
       window.location.replace('/' + stock[0] + '/' + stock[1]);
     },
-    minLength: 2
+    minLength: 2,
+    autoFocus: true
   });
 </script>
 {% endblock %}
