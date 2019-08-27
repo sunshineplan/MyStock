@@ -147,8 +147,9 @@ span {
 
 .input-group {
     width: 360px;
-    padding: 10px 0px;
-    margin-left: 80px;
+    float: right;
+    padding-bottom: 10px;
+    margin-right: 80px;
 }
 
 .ui-autocomplete {
