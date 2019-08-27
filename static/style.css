@@ -144,3 +144,28 @@ span {
     background-color: #ca2055;
     border: 1px solid #ca2055;
 }
+
+.input-group {
+    width: 360px;
+    padding: 10px 0px;
+    margin-left: 80px;
+}
+
+.ui-autocomplete {
+    background-color: white;
+    border: 1px solid #6f9df5;
+    list-style-type: none;
+    padding: 0;
+    width: 250px;
+    cursor: default;
+    text-indent: 20px;
+}
+
+.ui-state-active {
+    color: white;
+    background-color: #008eff;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}

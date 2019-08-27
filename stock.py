@@ -66,6 +66,31 @@ def get_indices():
     return jsonify(indices)
 
 
+@bp.route('/suggest')
+def get_suggest():
+    keyword = request.args.get('keyword')
+    sse = 'http://query.sse.com.cn/search/getPrepareSearchResult.do'
+    szse = 'http://www.szse.cn/api/search/suggest'
+    try:
+        sse_suggest = requests.get(sse, params={'searchword': '%'+keyword+'%', 'search': 'ycxjs'}, headers={
+                                   'Referer': 'http://www.sse.com.cn/'}, timeout=1).json()['data']
+    except:
+        sse_suggest = []
+    try:
+        szse_suggest = requests.post(
+            szse, params={'keyword': keyword}, timeout=1).json()
+    except:
+        szse_suggest = []
+    suggest = []
+    for i in sse_suggest:
+        suggest.append(
+            {'category': 'SSE', 'code': i['CODE'], 'name': i['WORD'], 'type': i['CATEGORY']})
+    for i in szse_suggest:
+        suggest.append({'category': 'SZSE', 'code': i['wordB'].replace(
+            '<span class="keyword">', '').replace('</span>', ''), 'name': i['value'], 'type': i['type']})
+    return jsonify(suggest)
+
+
 @bp.route('/star', methods=('GET', 'POST'))
 def star():
     refer = request.referrer

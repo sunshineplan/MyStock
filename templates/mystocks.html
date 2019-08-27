@@ -5,6 +5,12 @@ My Stocks
 {% endblock %}
 
 {% block header %}
+<div class='input-group'>
+  <div class='input-group-prepend'>
+    <a class='input-group-text'>Search Stock</a>
+  </div>
+  <input class='form-control' placeholder='Search' id='autocomplete'>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -54,6 +60,22 @@ My Stocks
     reload = setInterval(function () {
       my_stocks();
     }, 5000);
-  })
+  });
+  $("#autocomplete").autocomplete({
+    source: function (request, response) {
+      $.get('/suggest', {
+        keyword: request.term
+      }, function (data) {
+        response($.map(data, function (item) {
+          return item.category + ':' + item.code + ' ' + item.name + ' ' + item.type;
+        }));
+      });
+    },
+    select: function (event, ui) {
+      var stock = ui.item.value.split(' ')[0].split(':');
+      window.location.replace('/' + stock[0] + '/' + stock[1]);
+    },
+    minLength: 2
+  });
 </script>
 {% endblock %}
