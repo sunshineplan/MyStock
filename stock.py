@@ -7,7 +7,7 @@ from flask import Blueprint, g, jsonify, render_template, request
 
 from db import get_db, init_db
 
-bp = Blueprint('stock', __name__,)
+bp = Blueprint('stock', __name__)
 
 
 @bp.route('/')
@@ -25,8 +25,12 @@ def get_stock(index, code):
 
 @bp.route('/<string:index>/<string:code>')
 def chart(index, code):
-    if fullmatch('(00[0-3]|159|300|399|51[0-3]|60[0-3]|688)\d{3}|51\d{4}', code):
-        return render_template('chart.html', index=index, code=code)
+    if index == 'SSE':
+        if fullmatch(SSE().pattern, code):
+            return render_template('chart.html', index=index, code=code)
+    elif index == 'SZSE':
+        if fullmatch(SZSE().pattern, code):
+            return render_template('chart.html', index=index, code=code)
     return render_template('chart.html', index=index, code='n/a')
 
 
@@ -83,11 +87,16 @@ def get_suggest():
         szse_suggest = []
     suggest = []
     for i in sse_suggest:
-        suggest.append(
-            {'category': 'SSE', 'code': i['CODE'], 'name': i['WORD'], 'type': i['CATEGORY']})
+        code = i['CODE']
+        if fullmatch(SSE().pattern, code):
+            suggest.append({'category': 'SSE', 'code': code,
+                            'name': i['WORD'], 'type': i['CATEGORY']})
     for i in szse_suggest:
-        suggest.append({'category': 'SZSE', 'code': i['wordB'].replace(
-            '<span class="keyword">', '').replace('</span>', ''), 'name': i['value'], 'type': i['type']})
+        code = i['wordB'].replace(
+            '<span class="keyword">', '').replace('</span>', '')
+        if fullmatch(SZSE().pattern, code):
+            suggest.append({'category': 'SZSE', 'code': code,
+                            'name': i['value'], 'type': i['type']})
     return jsonify(suggest)
 
 
@@ -146,8 +155,9 @@ def reorder():
 
 
 class SSE:
-    def __init__(self, code):
+    def __init__(self, code=None):
         self.code = code
+        self.pattern = '000[0-1]\d{2}|(51[0-358]|60[0-3]|688)\d{3}'
         try:
             if requests.get('http://yunhq.sse.com.cn:32041/v1/sh1/snap/%s' % code, timeout=1).status_code == 200:
                 self.exist = True
@@ -201,8 +211,9 @@ class SSE:
 
 
 class SZSE:
-    def __init__(self, code):
+    def __init__(self, code=None):
         self.code = code
+        self.pattern = '(00[0-3]|159|300|399)\d{3}'
         try:
             self.json = requests.get(
                 'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}, timeout=1).json()
