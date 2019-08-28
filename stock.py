@@ -11,6 +11,7 @@ bp = Blueprint('stock', __name__)
 
 INDICES = ['SSE', 'SZSE']
 
+
 @bp.route('/')
 def index():
     return render_template('mystocks.html')
