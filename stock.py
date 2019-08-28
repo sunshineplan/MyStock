@@ -9,6 +9,7 @@ from db import get_db, init_db
 
 bp = Blueprint('stock', __name__)
 
+INDICES = ['SSE', 'SZSE']
 
 @bp.route('/')
 def index():
@@ -16,8 +17,7 @@ def index():
 
 
 def get_stock(index, code):
-    indices = ['SSE', 'SZSE']
-    if index in indices:
+    if index in INDICES:
         return eval(index+'("'+code+'")')
     else:
         return None
@@ -25,13 +25,10 @@ def get_stock(index, code):
 
 @bp.route('/<string:index>/<string:code>')
 def chart(index, code):
-    if index == 'SSE':
-        if fullmatch(SSE().pattern, code):
+    if index in INDICES:
+        if fullmatch(eval(index+'().pattern'), code):
             return render_template('chart.html', index=index, code=code)
-    elif index == 'SZSE':
-        if fullmatch(SZSE().pattern, code):
-            return render_template('chart.html', index=index, code=code)
-    return render_template('chart.html', index=index, code='n/a')
+    return render_template('chart.html', index='n/a', code='n/a')
 
 
 @bp.route('/get')
