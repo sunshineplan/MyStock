@@ -5,6 +5,7 @@
 <script src='https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js'></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
 <link rel='stylesheet' href="{{ url_for('static', filename='style.css') }}">
 <nav class='navbar navbar-light topbar'>
   <a class='brand' href="{{ url_for('index') }}">My Stocks</a>
@@ -20,6 +21,12 @@
 </nav>
 <div>
   <header>
+    <div class='search'>
+      <div class='icon'>
+        <i class='material-icons'>search</i>
+      </div>
+      <input placeholder='Search Stock' id='autocomplete'>
+    </div>
     {% block header %}{% endblock %}
   </header>
   {% for message in get_flashed_messages() %}
@@ -45,16 +52,27 @@
       $.get('/suggest', {
         keyword: request.term
       }, function (data) {
-        response($.map(data, function (item) {
-          return item.category + ':' + item.code + ' ' + item.name + ' ' + item.type;
-        }));
+        if (!data.length) {
+          response(['No matches found.']);
+        } else {
+          response($.map(data, function (item) {
+            return item.category + ':' + item.code + ' ' + item.name + ' ' + item.type;
+          }));
+        };
       });
     },
     select: function (event, ui) {
-      var stock = ui.item.value.split(' ')[0].split(':');
-      window.location.replace('/' + stock[0] + '/' + stock[1]);
+      if (ui.item.value == 'No matches found.') {
+        event.preventDefault();
+      } else {
+        var stock = ui.item.value.split(' ')[0].split(':');
+        window.location.replace('/' + stock[0] + '/' + stock[1]);
+      };
     },
     minLength: 2,
-    autoFocus: true
+    autoFocus: true,
+    position: {
+      of: '.search'
+    }
   });
 </script>

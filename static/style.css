@@ -60,13 +60,30 @@ body {
     border-radius: 25px;
 }
 
-.material-icons {
-    font-size: 36px !important;
+.home .material-icons {
+    font-size: 36px;
     color: #1da1f2;
 }
 
-.form-control {
+.icon {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    padding-left: 20px;
+}
+
+.search {
     width: 250px;
+    display: flex;
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 80px;
+    background-color: #e6ecf0;
+    border-radius: 9999px;
+}
+
+.search:hover {
+    box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
 }
 
 .login {
@@ -145,16 +162,20 @@ span {
     border: 1px solid #ca2055;
 }
 
-.input-group {
-    width: 360px;
-    float: right;
-    padding-bottom: 10px;
-    margin-right: 80px;
+.ui-autocomplete-input {
+    background-color: transparent;
+    padding: 10px;
+    border: 0;
+}
+
+.ui-autocomplete-input:focus {
+    outline: none;
 }
 
 .ui-autocomplete {
     background-color: white;
-    border: 1px solid #6f9df5;
+    box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+    border-radius: 5px;
     list-style-type: none;
     padding: 0;
     width: 250px;
@@ -165,6 +186,7 @@ span {
 .ui-state-active {
     color: white;
     background-color: #008eff;
+    border-radius: 5px;
 }
 
 .ui-helper-hidden-accessible {
