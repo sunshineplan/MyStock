@@ -37,7 +37,7 @@ def get():
     index = request.args.get('index')
     code = request.args.get('code')
     q = request.args.get('q')
-    return jsonify(eval('get_stock(index, code).'+q))
+    return jsonify(getattr(get_stock(index, code), q))
 
 
 @bp.route('/mystocks')
