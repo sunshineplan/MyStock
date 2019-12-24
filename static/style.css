@@ -31,6 +31,10 @@ body {
     border-radius: 5px;
 }
 
+#chart {
+    padding-bottom: 80px;
+}
+
 .indices {
     position: fixed;
     z-index: 100;
@@ -93,7 +97,7 @@ body {
 }
 
 .table-responsive {
-    padding: 0px 30px;
+    padding: 0px 30px 80px;
     cursor: default;
 }
 
