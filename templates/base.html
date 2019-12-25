@@ -20,7 +20,7 @@
     {% endif %}
   </div>
 </nav>
-<div>
+<div class='content'>
   <header>
     {% if request.endpoint != 'auth.login' and request.endpoint != 'auth.setting' %}
     <div class='search'>
@@ -36,12 +36,12 @@
   <div class="alert alert-danger {% if request.endpoint == 'auth.login' %}login{% else %}d-inline-flex{% endif %}">{{ message }}</div>
   {% endfor %}
   {% block content %}{% endblock %}
-  <div class='indices'>
-    <a id='沪'>上证指数&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
-    <a id='深'>深证成指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
-    <a id='创'>创业板指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
-    <a id='中小板'>中小板指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
-  </div>
+</div>
+<div class='indices'>
+  <a id='沪'>上证指数&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
+  <a id='深'>深证成指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
+  <a id='创'>创业板指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
+  <a id='中小板'>中小板指&nbsp;&nbsp;<span class='now'>n/a</span>&nbsp;&nbsp;<span class='change'>n/a</span>&nbsp;&nbsp;<span class='percent'>n/a</span></a>
 </div>
 <script>
   $(function () {

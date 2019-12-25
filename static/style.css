@@ -4,7 +4,11 @@ body {
 }
 
 .topbar {
-    min-height: 60px;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    height: 60px;
     background-color: #1a73e8;
 }
 
@@ -31,8 +35,12 @@ body {
     border-radius: 5px;
 }
 
-#chart {
-    padding-bottom: 80px;
+.content {
+    position: fixed;
+    top: 0;
+    padding: 60px 0 80px;
+    width: 100%;
+    height: 100%;
 }
 
 .indices {
@@ -97,8 +105,23 @@ body {
 }
 
 .table-responsive {
-    padding: 0px 30px 80px;
+    height: calc(100% - 54px);
+    padding: 0px 30px;
     cursor: default;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    background-color: white;
+}
+
+.chart {
+    max-width: 1000px;
+    max-height: 500px;
+    height: calc(100% - 210px);
 }
 
 header {
