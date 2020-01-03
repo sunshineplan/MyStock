@@ -221,3 +221,17 @@ span {
 .ui-helper-hidden-accessible {
     display: none;
 }
+
+.short {
+    display: none;
+}
+
+@media (max-width: 1360px) {
+    .short {
+        display: inline; 
+    }
+    
+    .full {
+        display: none;
+    }
+}
