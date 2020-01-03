@@ -108,6 +108,7 @@ body {
     height: calc(100% - 54px);
     padding: 0px 30px;
     cursor: default;
+    white-space: nowrap;
 }
 
 th {
