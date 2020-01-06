@@ -155,7 +155,7 @@ def reorder():
 class SSE:
     def __init__(self, code=None):
         self.code = code
-        self.pattern = '000[0-1]\d{2}|(51[0-358]|60[0-3]|688)\d{3}'
+        self.pattern = r'000[0-1]\d{2}|(51[0-358]|60[0-3]|688)\d{3}'
         try:
             if requests.get(f'http://yunhq.sse.com.cn:32041/v1/sh1/snap/{code}', timeout=1).status_code == 200:
                 self.exist = True
@@ -211,7 +211,7 @@ class SSE:
 class SZSE:
     def __init__(self, code=None):
         self.code = code
-        self.pattern = '(00[0-3]|159|300|399)\d{3}'
+        self.pattern = r'(00[0-3]|159|300|399)\d{3}'
         try:
             self.json = requests.get(
                 'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}, timeout=1).json()
