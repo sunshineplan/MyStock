@@ -87,11 +87,21 @@ function update_realtime(index, code) {
         last[last.length - 1].y = json.now;
         chart.update();
       };
+      if (json.sell5 === null && json.buy5 === null) {
+        $('#info').width(480)
+        $('#buysell').hide();
+      };
       $.each(json, function (key, val) {
         if (key == 'sell5' || key == 'buy5') {
-          var list = '';
+          if (key == 'sell5') {
+            var list = '卖盘:&nbsp;';
+            var color = 'red';
+          } else {
+            var list = '买盘:&nbsp;';
+            var color = 'green';
+          };
           $.each(val, function (i, item) {
-            list = list + '<div class="buysell">' + item[0] + '-' + item[1] + '</div>';
+            list = list + '<div class="buysell" style="color: ' + color + ';">' + item[0] + '-' + item[1] + '</div>';
           });
           $('header .' + key).html(list);
         } else {

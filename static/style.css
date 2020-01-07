@@ -135,8 +135,8 @@ small {
     padding-left: 5px;
 }
 
-span {
-    min-width: 75px;
+.sell5, .buy5 {
+    display: inline-flex;
 }
 
 .buysell {
