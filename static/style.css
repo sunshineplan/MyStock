@@ -1,6 +1,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
                  'Microsoft YaHei New', 'Microsoft Yahei', 微软雅黑, 宋体, SimSun, STXihei, 华文细黑, sans-serif;
+    white-space: nowrap;
 }
 
 .topbar {
@@ -53,6 +54,7 @@ body {
     align-items: center;
     background-color: white;
     box-shadow: 0 -1px 2px 0 #e7e7e7;
+    white-space: normal;
 }
 
 .home {
@@ -108,7 +110,6 @@ body {
     height: calc(100% - 54px);
     padding: 0px 30px;
     cursor: default;
-    white-space: nowrap;
 }
 
 th {
@@ -127,10 +128,6 @@ th {
 
 header {
     padding: 10px 20px;
-}
-
-h2 {
-    padding: 5px 20px;
 }
 
 small {
@@ -161,34 +158,19 @@ span {
 }
 
 .star {
-    width: 100px;
-    vertical-align: middle;
-    border-radius: 25px;
-    border: 1px solid #1da1f2;
-    padding: 10px 20px;
-    margin-left: 150px;
-    color: #1da1f2;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: white;
+    color: #f4b400;
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    cursor: default;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .star:hover {
-    background-color: rgba(29, 161, 242, 0.1);
-}
-
-.star:focus {
-    outline: none;
-}
-
-.star.stared {
-    background-color: #1da1f2;
-    color: white;
-}
-
-.star.unstar {
-    background-color: #ca2055;
-    border: 1px solid #ca2055;
+    background-color: #fcebbaa1;
+    border-radius: 50%;
 }
 
 .ui-autocomplete-input {

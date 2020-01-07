@@ -11,17 +11,17 @@
   </div>
   <a>Home</a>
 </div>
-<h2>
+<div style='display: flex; font-size: 2rem;'>
+  <i class='material-icons star'>star_border</i>
   <span class='name'>n/a</span>(<span class='code'>n/a</span>)&nbsp;&nbsp;&nbsp;
   <span class='now'></span>&nbsp;&nbsp;&nbsp;<span class='percent'></span>
-  <button class='star'>Star</button>
-</h2>
+</div>
 <script>
   $(function () {
     $.get('/star', function (data) {
       if (data == 'True') {
         $('.star').addClass('stared');
-        $('.star').text('Stared');
+        $('.star').text('star');
       };
     });
   });
@@ -30,24 +30,13 @@
       $.post('/star', { action: 'unstar' }, function () {
         $('.star').removeClass('stared');
         $('.star').removeClass('unstar');
-        $('.star').text('Star');
+        $('.star').text('star_border');
       });
     } else {
       $.post('/star', function () {
         $('.star').addClass('stared');
-        $('.star').text('Stared');
+        $('.star').text('star');
       });
-    };
-  });
-  $('.star').hover(function () {
-    if ($(this).hasClass('stared')) {
-      $(this).addClass('unstar');
-      $(this).text('Unstar');
-    };
-  }, function () {
-    if ($(this).hasClass('stared')) {
-      $(this).removeClass('unstar');
-      $(this).text('Stared');
     };
   });
 </script>
