@@ -115,10 +115,10 @@
       update_chart('{{ index }}', '{{ code }}');
       update_realtime('{{ index }}', '{{ code }}');
       setInterval(function () {
-        update_chart('{{ index }}', '{{ code }}');
+        update_chart('{{ index }}', '{{ code }}', ct=true);
       }, 60000);
       setInterval(function () {
-        update_realtime('{{ index }}', '{{ code }}');
+        update_realtime('{{ index }}', '{{ code }}', ct=true);
       }, 5000);
     };
   });

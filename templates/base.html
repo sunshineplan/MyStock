@@ -83,7 +83,7 @@
   $(function () {
     update_indices();
     setInterval(function () {
-      update_indices();
+      update_indices(ct=true);
     }, 30000);
   });
   $("#autocomplete").autocomplete({

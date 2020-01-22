@@ -37,7 +37,7 @@ My Stocks
       stop: function () {
         my_stocks();
         reload = setInterval(function () {
-          my_stocks();
+          my_stocks(ct=true);
         }, 5000);
       },
       update: function (event, ui) {
@@ -52,7 +52,7 @@ My Stocks
     });
     my_stocks();
     reload = setInterval(function () {
-      my_stocks();
+      my_stocks(ct=true);
     }, 5000);
   });
 </script>
