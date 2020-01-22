@@ -209,6 +209,10 @@ small {
 }
 
 @media (max-width: 1360px) {
+    .search {
+        margin-right: 0;
+    }
+
     .short {
         display: inline; 
     }
