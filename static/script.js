@@ -166,7 +166,8 @@ function change_color(name) {
 function check_time() {
   var date = new Date();
   var hour = date.getUTCHours();
-  if ( hour >= 1 && hour <= 8 ) {
+  var day = date.getDay();
+  if ( hour >= 1 && hour <= 8 && day >= 1 && day <= 5 ) {
     return 1;
   };
 };
