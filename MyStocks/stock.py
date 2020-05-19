@@ -1,10 +1,12 @@
-from datetime import date, datetime, time, timedelta
+#!/usr/bin/env python3
+
 from json import loads
 from re import fullmatch
 
 import requests
 from flask import Blueprint, g, jsonify, render_template, request
 
+from MyStocks.base import SSE, SZSE
 from MyStocks.db import get_db, init_db
 
 bp = Blueprint('stock', __name__)
@@ -74,8 +76,9 @@ def get_suggest():
     sse = 'http://query.sse.com.cn/search/getPrepareSearchResult.do'
     szse = 'http://www.szse.cn/api/search/suggest'
     try:
-        sse_suggest = requests.get(sse, params={'searchword': '%'+keyword+'%', 'search': 'ycxjs'}, headers={
-                                   'Referer': 'http://www.sse.com.cn/'}, timeout=1).json()['data']
+        headers = {'Referer': 'http://www.sse.com.cn/'}
+        sse_suggest = requests.get(sse, params={'searchword': '%'+keyword+'%', 'search': 'ycxjs'},
+                                   headers=headers, timeout=1).json()['data']
     except:
         sse_suggest = []
     try:
@@ -150,108 +153,3 @@ def reorder():
         db.commit()
         return '1'
     return '0'
-
-
-class SSE:
-    def __init__(self, code=None):
-        self.code = code
-        self.pattern = r'000[0-1]\d{2}|(51[0-358]|60[0-3]|688)\d{3}'
-        try:
-            if requests.get(f'http://yunhq.sse.com.cn:32041/v1/sh1/snap/{code}', timeout=1).status_code == 200:
-                self.exist = True
-            else:
-                self.exist = False
-        except:
-            self.exist = False
-        if self.exist:
-            try:
-                self.snap = requests.get(
-                    f'http://yunhq.sse.com.cn:32041/v1/sh1/snap/{code}', timeout=1).json()
-                self.line = requests.get(
-                    f'http://yunhq.sse.com.cn:32041/v1/sh1/line/{code}', timeout=1).json()
-            except:
-                self.exist = False
-
-    @property
-    def realtime(self):
-        if self.exist:
-            realtime = {'index': 'SSE',
-                        'code': self.snap['code'],
-                        'name': self.snap['snap'][0].strip(),
-                        'now': self.snap['snap'][5],
-                        'change': self.snap['snap'][6],
-                        'percent': str(self.snap['snap'][7])+'%',
-                        'sell5': [[self.snap['snap'][-1][i], self.snap['snap'][-1][i+1]] for i in range(0, 10, 2)],
-                        'buy5': [[self.snap['snap'][-2][i], self.snap['snap'][-2][i+1]] for i in range(0, 10, 2)],
-                        'high': self.snap['snap'][3],
-                        'low': self.snap['snap'][4],
-                        'open': self.snap['snap'][2],
-                        'last': self.snap['snap'][1],
-                        'update': str(self.snap['date'])+'.'+str(self.snap['time'])}
-            return realtime
-        return {'index': 'SSE', 'code': self.code, 'name': 'n/a'}
-
-    @property
-    def chart(self):
-        if self.exist:
-            line = self.line['line']
-            chart = []
-            sessions = [(datetime.combine(date.today(), time(9, 30)) +
-                         timedelta(minutes=i)).strftime('%H:%M') for i in range(331)]
-            lunch = [(datetime.combine(date.today(), time(11, 31)) +
-                      timedelta(minutes=i)).strftime('%H:%M') for i in range(90)]
-            for i in lunch:
-                sessions.remove(i)
-            for l in line:
-                chart.append({'x': sessions.pop(0), 'y': l[0]})
-            return {'last': self.realtime['last'], 'chart': chart}
-        return None
-
-
-class SZSE:
-    def __init__(self, code=None):
-        self.code = code
-        self.pattern = r'(00[0-3]|159|300|399)\d{3}'
-        try:
-            self.json = requests.get(
-                'http://www.szse.cn/api/market/ssjjhq/getTimeData', params={'marketId': 1, 'code': code}, timeout=1).json()
-            self.exist = True if self.json['code'] == '0' else False
-        except:
-            self.exist = False
-
-    @property
-    def realtime(self):
-        if self.exist:
-            try:
-                sell5 = [list(i.values())
-                         for i in self.json['data']['sellbuy5'][:5]]
-                buy5 = [list(i.values())
-                        for i in self.json['data']['sellbuy5'][5:]]
-            except KeyError:
-                sell5 = None
-                buy5 = None
-            realtime = {'index': 'SZSE',
-                        'code': self.json['data']['code'],
-                        'name': self.json['data']['name'],
-                        'now': self.json['data']['now'],
-                        'change': self.json['data']['delta'],
-                        'percent': self.json['data']['deltaPercent']+'%',
-                        'sell5': sell5,
-                        'buy5': buy5,
-                        'high': self.json['data']['high'],
-                        'low': self.json['data']['low'],
-                        'open': self.json['data']['open'],
-                        'last': self.json['data']['close'],
-                        'update': self.json['data']['marketTime']}
-            return realtime
-        return {'index': 'SZSE', 'code': self.code}
-
-    @property
-    def chart(self):
-        if self.exist:
-            picupdata = self.json['data']['picupdata']
-            chart = []
-            for i in picupdata:
-                chart.append({'x': i[0], 'y': i[1]})
-            return {'last': float(self.realtime['last']), 'chart': chart}
-        return None
