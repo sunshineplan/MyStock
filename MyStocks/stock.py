@@ -5,7 +5,7 @@ from re import fullmatch
 import requests
 from flask import Blueprint, g, jsonify, render_template, request
 
-from db import get_db, init_db
+from MyStocks.db import get_db, init_db
 
 bp = Blueprint('stock', __name__)
 

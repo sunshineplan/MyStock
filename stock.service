@@ -1,0 +1,10 @@
+[Unit]
+Description=uWSGI instance to serve My Stocks
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /var/www/stock/MyStocks.ini
+WorkingDirectory=/var/www/stock
+
+[Install]
+WantedBy=multi-user.target
