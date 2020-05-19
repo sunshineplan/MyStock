@@ -28,5 +28,9 @@ def run(port, debug):
     app.run(host='0.0.0.0', port=port, debug=debug)
 
 
-if __name__ == '__main__':
+def main():
     cli()
+
+
+if __name__ == '__main__':
+    main()
