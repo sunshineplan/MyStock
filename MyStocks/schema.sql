@@ -1,15 +1,9 @@
 -- Initialize the database.
--- Drop any existing data and create empty tables and view.
-
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS stock;
-DROP TRIGGER IF EXISTS add_seq;
-DROP TRIGGER IF EXISTS reorder;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL DEFAULT '123456'
 );
 
 CREATE TABLE stock (
@@ -35,8 +29,7 @@ END;
 INSERT INTO user
   (id, username, password)
 VALUES
-  (0, 'guest', ''),
-  (1, 'sunshine', '123456');
+  (0, 'guest', '');
 
 INSERT INTO stock
   (user_id, idx, code)
@@ -45,11 +38,4 @@ VALUES
   (0, 'SZSE', '399001'),
   (0, 'SZSE', '399106'),
   (0, 'SZSE', '399005'),
-  (0, 'SZSE', '399006'),
-  (1, 'SZSE', '002142'),
-  (1, 'SSE', '601288'),
-  (1, 'SSE', '600309'),
-  (1, 'SSE', '510050'),
-  (1, 'SSE', '513100'),
-  (1, 'SSE', '513500'),
-  (1, 'SSE', '518880');
+  (0, 'SZSE', '399006');

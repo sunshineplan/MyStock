@@ -48,7 +48,7 @@ def login():
         error = None
         try:
             user = db.execute('SELECT * FROM user WHERE username = ?',
-                              (username,)).fetchone()
+                              (username.lower(),)).fetchone()
         except:
             tables = db.execute('SELECT name FROM sqlite_master').fetchall()
             if tables == []:

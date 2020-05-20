@@ -35,6 +35,8 @@ def init_db(app=current_app):
     '''Clear existing data and create new tables and views.'''
     db = sqlite3.connect(
         app.config['DATABASE'], detect_types=sqlite3.PARSE_DECLTYPES)
+    with app.open_resource('drop_all.sql') as f:
+        db.executescript(f.read().decode('utf8'))
     with app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
