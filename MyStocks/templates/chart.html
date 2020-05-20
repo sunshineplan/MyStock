@@ -102,9 +102,21 @@
     options: {
       scales: {
         xAxes: [{
+          gridLines: {
+            drawTicks: false
+          },
           ticks: {
+            padding: 10,
             autoSkipPadding: 100,
             maxRotation: 0
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            drawTicks: false
+          },
+          ticks: {
+            padding: 10
           }
         }]
       },

@@ -126,10 +126,8 @@ function update_chart(index, code, ct = false) {
         chart.data.datasets.forEach((dataset) => {
           dataset.data = json['chart'];
         });
-        chart.options.scales.yAxes[0].ticks = {
-          suggestedMin: json['last'] / 1.01,
-          suggestedMax: json['last'] * 1.01
-        };
+        chart.options.scales.yAxes[0].ticks.suggestedMin = json['last'] / 1.01;
+        chart.options.scales.yAxes[0].ticks.suggestedMax = json['last'] * 1.01;
         chart.annotation.options.annotations[0].value = json['last'];
         chart.update();
       };
