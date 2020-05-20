@@ -1,5 +1,5 @@
-function update_indices(ct=false) {
-  if ( check_time() === 1 || ct === false ) {
+function update_indices(ct = false) {
+  if (check_time() === 1 || ct === false) {
     $.getJSON('/indices', function (data) {
       $.each(data, function (index, json) {
         if (json !== null) {
@@ -25,8 +25,8 @@ function update_indices(ct=false) {
     });
   };
 };
-function my_stocks(ct=false) {
-  if ( check_time() === 1 || ct === false ) {
+function my_stocks(ct = false) {
+  if (check_time() === 1 || ct === false) {
     mystocks = $.getJSON('/mystocks', function (json) {
       $('#mystocks').empty();
       $.each(json, function (i, item) {
@@ -82,8 +82,8 @@ function add_color_tr(last, value, element) {
     element.append($('<td>').text(value));
   };
 };
-function update_realtime(index, code, ct=false) {
-  if ( check_time() === 1 || ct === false ) {
+function update_realtime(index, code, ct = false) {
+  if (check_time() === 1 || ct === false) {
     $.getJSON('/get', { index: index, code: code, q: 'realtime' }, function (json) {
       if (json !== null && json.name != 'n/a') {
         document.title = json.name + ' ' + json.now + ' ' + json.percent;
@@ -119,8 +119,8 @@ function update_realtime(index, code, ct=false) {
     });
   };
 };
-function update_chart(index, code, ct=false) {
-  if ( check_time() === 1 || ct === false ) {
+function update_chart(index, code, ct = false) {
+  if (check_time() === 1 || ct === false) {
     $.get('/get', { index: index, code: code, q: 'chart' }, function (json) {
       if (json !== null) {
         chart.data.datasets.forEach((dataset) => {
@@ -168,7 +168,7 @@ function check_time() {
   var date = new Date();
   var hour = date.getUTCHours();
   var day = date.getDay();
-  if ( hour >= 1 && hour <= 8 && day >= 1 && day <= 5 ) {
+  if (hour >= 1 && hour <= 8 && day >= 1 && day <= 5) {
     return 1;
   };
 };
