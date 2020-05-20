@@ -14,6 +14,18 @@ CREATE TABLE stock (
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
+CREATE TRIGGER add_user AFTER INSERT ON user
+BEGIN
+    INSERT INTO stock
+      (user_id, idx, code)
+    VALUES
+      (new.id, 'SSE', '000001'),
+      (new.id, 'SZSE', '399001'),
+      (new.id, 'SZSE', '399106'),
+      (new.id, 'SZSE', '399005'),
+      (new.id, 'SZSE', '399006');
+END;
+
 CREATE TRIGGER add_seq AFTER INSERT ON stock
 BEGIN
     UPDATE stock SET seq = (SELECT MAX(seq) + 1 FROM stock WHERE user_id = new.user_id)
@@ -30,12 +42,3 @@ INSERT INTO user
   (id, username, password)
 VALUES
   (0, 'guest', '');
-
-INSERT INTO stock
-  (user_id, idx, code)
-VALUES
-  (0, 'SSE', '000001'),
-  (0, 'SZSE', '399001'),
-  (0, 'SZSE', '399106'),
-  (0, 'SZSE', '399005'),
-  (0, 'SZSE', '399006');
