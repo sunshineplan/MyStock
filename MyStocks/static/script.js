@@ -130,6 +130,7 @@ function update_chart(index, code, ct=false) {
           suggestedMin: json['last'] / 1.01,
           suggestedMax: json['last'] * 1.01
         };
+        chart.annotation.options.annotations[0].value = json['last'];
         chart.update();
       };
     });
