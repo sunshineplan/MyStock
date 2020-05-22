@@ -1,12 +1,12 @@
 #! /bin/bash
 
 installSoftware() {
-    apt -qq -y install python3-flask python3-click uwsgi-plugin-python3 python3-pip nginx git
+    apt -qq -y install python3-flask python3-click python3-requests python3-aiohttp uwsgi-plugin-python3 python3-pip nginx git
 }
 
 installMyStocks() {
     mkdir -p /var/log/uwsgi
-    pip3 install -e git+https://github.com/sunshineplan/MyStocks.git#egg=bookmark --src /var/www
+    pip3 install -e git+https://github.com/sunshineplan/MyStocks.git#egg=stock --src /var/www
 }
 
 setupsystemd() {
