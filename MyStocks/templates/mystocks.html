@@ -38,7 +38,7 @@ My Stocks
         my_stocks();
         reload = setInterval(function () {
           my_stocks(ct=true);
-        }, 5000);
+        }, 3000);
       },
       update: function (event, ui) {
         var orig = [ui.item.find('td')[0].textContent, ui.item.find('td')[1].textContent];
@@ -53,7 +53,7 @@ My Stocks
     my_stocks();
     reload = setInterval(function () {
       my_stocks(ct=true);
-    }, 5000);
+    }, 3000);
   });
 </script>
 {% endblock %}

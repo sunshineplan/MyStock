@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import asyncio
 from json import loads
 from re import fullmatch
 
@@ -14,16 +15,31 @@ bp = Blueprint('stock', __name__)
 INDICES = ['SSE', 'SZSE']
 
 
-@bp.route('/')
-def index():
-    return render_template('mystocks.html')
-
-
 def get_stock(index, code):
     if index in INDICES:
         return eval(index+'("'+code+'")')
     else:
         return None
+
+
+async def get_realtime(stock):
+    def get_stock_realtime(stock):
+        stock = get_stock(stock['idx'], stock['code'])
+        return stock.realtime()
+    if isinstance(stock, list):
+        return await asyncio.gather(*[get_stock_realtime(s) for s in stock])
+    else:
+        return await get_stock_realtime(stock)
+
+
+async def get_chart(stock):
+    stock = get_stock(stock['idx'], stock['code'])
+    return await stock.chart()
+
+
+@bp.route('/')
+def index():
+    return render_template('mystocks.html')
 
 
 @bp.route('/<string:index>/<string:code>')
@@ -39,7 +55,12 @@ def get():
     index = request.args.get('index')
     code = request.args.get('code')
     q = request.args.get('q')
-    return jsonify(getattr(get_stock(index, code), q))
+    if q == 'realtime':
+        return jsonify(asyncio.run(get_realtime({'idx': index, 'code': code})))
+    elif q == 'chart':
+        return jsonify(asyncio.run(get_chart({'idx': index, 'code': code})))
+    else:
+        return ''
 
 
 @bp.route('/mystocks')
@@ -57,17 +78,16 @@ def get_mystocks():
         if tables == []:
             init_db()
             return get_mystocks()
-    result = []
-    for i in my_stocks:
-        result.append(get_stock(i['idx'], i['code']).realtime)
-    return jsonify(result)
+    return jsonify(asyncio.run(get_realtime(my_stocks)))
 
 
 @bp.route('/indices')
 def get_indices():
-    indices = {'沪': SSE('000001').realtime, '深': SZSE('399001').realtime,
-               '创': SZSE('399006').realtime, '中小板': SZSE('399005').realtime}
-    return jsonify(indices)
+    indices = [{'idx': 'SSE', 'code': '000001'}, {'idx': 'SZSE', 'code': '399001'},
+               {'idx': 'SZSE', 'code': '399006'}, {'idx': 'SZSE', 'code': '399005'}]
+    realtimes = asyncio.run(get_realtime(indices))
+    return jsonify({'沪': realtimes[0], '深': realtimes[1],
+                    '创': realtimes[2], '中小板': realtimes[3]})
 
 
 @bp.route('/suggest')
