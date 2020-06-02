@@ -27,6 +27,7 @@ async def get_realtime(stock):
         stock = get_stock(stock['idx'], stock['code'])
         return stock.realtime()
     if isinstance(stock, list):
+        await asyncio.sleep(1)
         return await asyncio.gather(*[get_stock_realtime(s) for s in stock])
     else:
         return await get_stock_realtime(stock)
